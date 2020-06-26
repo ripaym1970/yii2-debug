@@ -13,7 +13,14 @@ $encodedName = Html::encode($panel->getName());
 
 <?php
 if (isset($panel->data['identity'])) {
-    $name = 
+    if ($panel->filterColumns) {
+        $panel->data['attributes'] = ArrayHelper::index($panel->data['attributes'], 'attribute');
+        foreach ($panel->filterColumns as $key => $item) {
+            if (isset($panel->data['attributes'][$item['attribute']])) {
+                $panel->data['attributes'][$item['attribute']] = array_merge($panel->data['attributes'][$item['attribute']], $item);
+            }
+        }
+    }
     $items = [
         'nav' => [$encodedName],
         'content' => [
